@@ -1,0 +1,18 @@
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\DL 770 Prototype.exe
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\DL 770 Prototype.pdb
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.Form1.resources
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.Properties.Resources.resources
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770 Prototype.csproj.GenerateResource.Cache
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL 770 Prototype.exe
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL 770 Prototype.pdb
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\RFID_DB.sdf
+E:\projects\DL 770\DL770WinCE\bin\Debug\RFID_DB.sdf
+E:\projects\DL 770\DL770WinCE\bin\Debug\DL 770 Prototype.exe
+E:\projects\DL 770\DL770WinCE\bin\Debug\DL 770 Prototype.pdb
+E:\projects\DL 770\DL770WinCE\obj\Debug\ResolveAssemblyReference.cache
+E:\projects\DL 770\DL770WinCE\obj\Debug\DL770WinCE.Form1.resources
+E:\projects\DL 770\DL770WinCE\obj\Debug\DL770WinCE.Properties.Resources.resources
+E:\projects\DL 770\DL770WinCE\obj\Debug\DL770 Prototype.csproj.GenerateResource.Cache
+E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.exe
+E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.pdb

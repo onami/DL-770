@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DL770WinCE">
+</Property><Property Name="Solution File" Value="C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE.sln">
+</Property><Property Name="User Options File" Value="C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE.suo">
+</Property><Property Name="Date" Value="23 февраля 2012 г.">
+</Property><Property Name="Time" Value="17:49">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="DL770WinCE.sln" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE.sln">
+</Event><Event ErrorLevel="0" Project="" Source="DL770WinCE.suo" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE.suo">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\DL770WinCE.csproj" Description="Project file successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\DL770WinCE.csproj">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\DL770WinCE.csproj.user" Description="Project user file successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\DL770WinCE.csproj.user">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Form1.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Form1.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Form1.Designer.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Form1.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Program.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Program.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Properties\AssemblyInfo.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Properties\Resources.Designer.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\RWDev.cs" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\RWDev.cs">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Form1.resx" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Form1.resx">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Properties\Resources.resx" Description="File successfully backed up as C:\Users\Андрей\Documents\!work\DL770 WinCE\Backup\DL770WinCE\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\DL770WinCE.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DL770WinCE" Source="DL770WinCE\DL770WinCE.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DL770WinCE.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="DL770WinCE.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Form1.resx" Description="File converted successfully">
+</Event><Event ErrorLevel="3" Project="DL770WinCE" Source="DL770WinCE\Form1.resx" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\Properties\Resources.resx" Description="File converted successfully">
+</Event><Event ErrorLevel="3" Project="DL770WinCE" Source="DL770WinCE\Properties\Resources.resx" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DL770WinCE" Source="DL770WinCE\DL770WinCE.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

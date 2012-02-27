@@ -1,0 +1,8 @@
+bin\Debug\DL770WinCE.exe
+bin\Debug\DL770WinCE.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\DL770WinCE.Form1.resources
+obj\Debug\DL770WinCE.Properties.Resources.resources
+obj\Debug\DL770WinCE.csproj.GenerateResource.Cache
+obj\Debug\DL770WinCE.exe
+obj\Debug\DL770WinCE.pdb

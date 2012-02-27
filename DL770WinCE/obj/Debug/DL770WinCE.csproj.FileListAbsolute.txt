@@ -1,0 +1,8 @@
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\DL770WinCE.exe
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\DL770WinCE.pdb
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.Form1.resources
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.Properties.Resources.resources
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.csproj.GenerateResource.Cache
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.exe
+C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770WinCE.pdb
