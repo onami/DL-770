@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DL770WinCE
 {
-    class TestGit
+    class Class1
     {
     }
 }
