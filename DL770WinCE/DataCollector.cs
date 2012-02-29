@@ -18,10 +18,13 @@ namespace DL770WinCE
           
             connection.Open();
 
-            if(checkTable() == false) createTable();
+            if (isTableExist() == false)
+            {
+                createTable();
+            }
         }
 
-        public bool checkTable()
+        private bool isTableExist()
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
@@ -37,7 +40,7 @@ namespace DL770WinCE
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
-                command.CommandText = @"CREATE TABLE [rfidTags] (
+                command.CommandText = @"CREATE TABLE if not exists [rfidTags] (
                     [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                     [data] char(32) NOT NULL,
                     [time] char(23) NOT NULL
