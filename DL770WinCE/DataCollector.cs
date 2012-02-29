@@ -1,26 +1,59 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Data.SqlServerCe;
+using System.IO;
+using System.Reflection;
+using System.Data.SQLite;
+using System.Data;
 
 namespace DL770WinCE
 {
     public class DataCollector
     {
-        private SqlCeConnection connection;
+        private string tableName = "rfidTags";
+        private SQLiteConnection connection;
 
         public DataCollector()
         {
-            connection = new SqlCeConnection("Data Source=RFID_DB.sdf");
-            connection.Open();        
+            string databasePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfidDb.sqlit";
+            connection = new SQLiteConnection("data source=" + databasePath);
+          
+            connection.Open();
+
+            if(checkTable() == false) createTable();
+        }
+
+        public bool checkTable()
+        {
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "'";
+                command.CommandType = CommandType.Text;
+                if (command.ExecuteScalar() != null) return true;
+
+                return false;
+            }
+        }
+
+        private void createTable()
+        {
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"CREATE TABLE [rfidTags] (
+                    [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    [data] char(32) NOT NULL,
+                    [time] char(23) NOT NULL
+                    );";
+                command.CommandType = CommandType.Text;
+                command.ExecuteNonQuery();
+            }
         }
 
         public void write(String rfidTag)
         {
-            var cmd = connection.CreateCommand();
-            var insertString = "INSERT INTO rfid(tagName) VALUES("+rfidTag+")";
-            var comInsert = new SqlCeCommand(insertString, connection);
+            var insertString = "INSERT INTO rfidTags (data, time) VALUES('" + rfidTag + "', '" + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
+
+            var comInsert = new SQLiteCommand(insertString, connection);
             comInsert.ExecuteNonQuery();
+            comInsert.Dispose();
         }
 
         ~DataCollector()

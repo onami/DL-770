@@ -7,7 +7,6 @@ C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL770 Pro
 C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL 770 Prototype.exe
 C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\obj\Debug\DL 770 Prototype.pdb
 C:\Users\Андрей\Documents\!work\DL770 WinCE\DL770WinCE\bin\Debug\RFID_DB.sdf
-E:\projects\DL 770\DL770WinCE\bin\Debug\RFID_DB.sdf
 E:\projects\DL 770\DL770WinCE\bin\Debug\DL 770 Prototype.exe
 E:\projects\DL 770\DL770WinCE\bin\Debug\DL 770 Prototype.pdb
 E:\projects\DL 770\DL770WinCE\obj\Debug\ResolveAssemblyReference.cache
@@ -16,3 +15,5 @@ E:\projects\DL 770\DL770WinCE\obj\Debug\DL770WinCE.Properties.Resources.resource
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL770 Prototype.csproj.GenerateResource.Cache
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.exe
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.pdb
+E:\projects\DL 770\DL770WinCE\bin\Debug\System.Data.SQLite.dll
+E:\projects\DL 770\DL770WinCE\bin\Debug\System.Data.SQLite.xml

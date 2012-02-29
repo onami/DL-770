@@ -210,7 +210,7 @@ namespace DL770WinCE
                               if (temp == ListView1_EPC.Items[n].SubItems[1].Text)
                                 {
                                     aListItem = ListView1_EPC.Items[n];
-                                    ChangeSubItem(aListItem, 1, '$' + temp);
+                                    ChangeSubItem(aListItem, 1, collector.checkTable() + "-" + temp);
                                     collector.write(temp);
                                     isonlistview = true;
                                 }
