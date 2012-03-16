@@ -90,6 +90,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>rfidDbDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="rfidDbDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rfidDbDataSet1.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RWDev.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +108,17 @@
     </None>
     <None Include="rfidDbDataSet.xss">
       <DependentUpon>rfidDbDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="rfidDbDataSet1.xsc">
+      <DependentUpon>rfidDbDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="rfidDbDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>rfidDbDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="rfidDbDataSet1.xss">
+      <DependentUpon>rfidDbDataSet1.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />

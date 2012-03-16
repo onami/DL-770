@@ -10,7 +10,7 @@ namespace DL770WinCE
     {
         string tableName = "rfidTags";
         SQLiteConnection connection;
-
+        SQLiteTransaction transaction;
         int queryCnt; //количество сделанных записей
 
         public DataCollector()
@@ -24,21 +24,6 @@ namespace DL770WinCE
             {
                 createTable();
             }
-        }
-
-        void checkTransaction()
-        {
-            if (queryCnt == 0)
-            {
-                new SQLiteCommand("begin", connection).ExecuteNonQuery();
-                queryCnt++;
-            }
-            else if (queryCnt > 20)
-            {
-                new SQLiteCommand("end", connection).ExecuteNonQuery();
-                queryCnt = 0;
-                checkTransaction();
-            }    
         }
 
         bool isTableExist()
@@ -67,21 +52,18 @@ namespace DL770WinCE
             }
         }
 
-        public void write(String rfidTag)
+        public void write(String rfid)
         {
-            var insertString = "INSERT INTO rfidTags (data, time) VALUES('" + rfidTag + "', '" + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-            var comInsert = new SQLiteCommand(insertString, connection);
-            checkTransaction();
+            var comInsert = new SQLiteCommand("INSERT INTO rfidTags (data, time) VALUES(@rfid, @time)", connection);
+            comInsert.Parameters.AddWithValue("@rfid", rfid);
+            comInsert.Parameters.AddWithValue("@time", System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
             comInsert.ExecuteNonQuery();
         }
 
         ~DataCollector()
         {
-            //if (connection != null && queryCnt != 0)
-            //{
-            //    new SQLiteCommand("end", connection).ExecuteNonQuery();       
-            //}
-            connection.Close();
+           // transaction.Dispose();
+           // connection.Close();
         }
 
     }
