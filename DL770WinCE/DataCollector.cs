@@ -8,8 +8,10 @@ namespace DL770WinCE
 {
     public class DataCollector
     {
-        private string tableName = "rfidTags";
-        private SQLiteConnection connection;
+        string tableName = "rfidTags";
+        SQLiteConnection connection;
+
+        int queryCnt; //количество сделанных записей
 
         public DataCollector()
         {
@@ -24,7 +26,22 @@ namespace DL770WinCE
             }
         }
 
-        private bool isTableExist()
+        void checkTransaction()
+        {
+            if (queryCnt == 0)
+            {
+                new SQLiteCommand("begin", connection).ExecuteNonQuery();
+                queryCnt++;
+            }
+            else if (queryCnt > 20)
+            {
+                new SQLiteCommand("end", connection).ExecuteNonQuery();
+                queryCnt = 0;
+                checkTransaction();
+            }    
+        }
+
+        bool isTableExist()
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
@@ -36,7 +53,7 @@ namespace DL770WinCE
             }
         }
 
-        private void createTable()
+        void createTable()
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
@@ -53,14 +70,17 @@ namespace DL770WinCE
         public void write(String rfidTag)
         {
             var insertString = "INSERT INTO rfidTags (data, time) VALUES('" + rfidTag + "', '" + System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "')";
-
             var comInsert = new SQLiteCommand(insertString, connection);
+            checkTransaction();
             comInsert.ExecuteNonQuery();
-            comInsert.Dispose();
         }
 
         ~DataCollector()
         {
+            //if (connection != null && queryCnt != 0)
+            //{
+            //    new SQLiteCommand("end", connection).ExecuteNonQuery();       
+            //}
             connection.Close();
         }
 

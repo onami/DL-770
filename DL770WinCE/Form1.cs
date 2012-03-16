@@ -230,7 +230,7 @@ namespace DL770WinCE
                                     comboBox1.Items.Add(temp);
                                 }
                             }
-                            MessageBeep(10);
+                           // MessageBeep(10);
                         }                        
                     }
                }
