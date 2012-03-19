@@ -12,6 +12,7 @@ using System.Reflection;
 using System.IO.Ports;
 using System.IO;
 using System.Runtime.InteropServices;
+using DataCollector;
 
 namespace DL770WinCE
 {
@@ -19,7 +20,7 @@ namespace DL770WinCE
     {
         public const int MB_ICONEXCLAMATION = 48;
 
-        private DataCollector collector = new DataCollector();
+        private DataCollector.DataCollector collector = new DataCollector.DataCollector(500, "rfidTags", Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfidDb.sqlite");
 
         [DllImport("coredll.dll")]
         public static extern bool MessageBeep(int uType);
@@ -51,6 +52,7 @@ namespace DL770WinCE
             btnDisconnect.Enabled = false;
             radioButton4.Checked = true;
         }
+        
         private string RR9086GetErrorCodeDesc(byte errorCode)
         {
             switch (errorCode)
@@ -279,6 +281,7 @@ namespace DL770WinCE
 
         private void Form1_Closing(object sender, CancelEventArgs e)
         {
+            collector.close();
             RWDev.ModulePowerOff();
         }
 

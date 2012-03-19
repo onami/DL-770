@@ -30,9 +30,6 @@ namespace DL770WinCE
         /// </summary>
         private void InitializeComponent()
         {
-
-
-
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPageReader = new System.Windows.Forms.TabPage();
             this.button4 = new System.Windows.Forms.Button();
@@ -644,8 +641,8 @@ namespace DL770WinCE
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "UHF-RFID demo";
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.Form1_Closing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.Form1_Closing);
             this.tabControl1.ResumeLayout(false);
             this.tabPageReader.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
