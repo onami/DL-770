@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using DL770WinCE;
-using System.Collections;
-using System.Resources;
-using System.Reflection;
-using System.IO.Ports;
-using System.IO;
-using System.Runtime.InteropServices;
-using DataCollector;
+using DL770.Rfid;
 
 namespace DL770WinCE
 {
@@ -20,7 +14,9 @@ namespace DL770WinCE
     {
         public const int MB_ICONEXCLAMATION = 48;
 
-        private DataCollector.DataCollector collector = new DataCollector.DataCollector(500, "rfidTags", Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfidDb.sqlite");
+        //private DataCollector.DataCollector collector = new DataCollector.DataCollector(500, "rfidTags", Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfidDb.sqlite");
+        private RfidTagsCollector collector = new RfidTagsCollector(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfid.db");
+        private RfidSession session;
 
         [DllImport("coredll.dll")]
         public static extern bool MessageBeep(int uType);
@@ -213,7 +209,13 @@ namespace DL770WinCE
                                 {
                                     aListItem = ListView1_EPC.Items[n];
                                     ChangeSubItem(aListItem, 1, temp);
-                                    collector.write(temp);
+
+                                    if (session.tags.Contains(temp) == false)
+                                    {
+                                    //    MessageBox.Show(temp);
+                                        session.tags.Add(temp);
+                                    }
+
                                     isonlistview = true;
                                 }
                             }
@@ -281,7 +283,7 @@ namespace DL770WinCE
 
         private void Form1_Closing(object sender, CancelEventArgs e)
         {
-            collector.close();
+            collector.Close();
             RWDev.ModulePowerOff();
         }
 
@@ -499,12 +501,17 @@ namespace DL770WinCE
             if (!timer1.Enabled)
             {
                 button5.Text = "Scan";
+                collector.Write(session);
             }
             else
             {
                 ListView1_EPC.Items.Clear();
                 list.Clear();
                 comboBox1.Items.Clear();
+
+                session = new RfidSession { sessionMode = RfidSession.SessionMode.Reading };
+                session.time = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
+
                 button5.Text = "Stop";
             }
         }

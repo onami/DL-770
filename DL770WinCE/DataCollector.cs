@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SQLite;
 using System.Data;
+using System.Windows.Forms;
 
 namespace DataCollector
 {
@@ -14,8 +15,11 @@ namespace DataCollector
 
         public DataCollector(int queriesAmount, string tableName, string connectionString)
         {
+            MessageBox.Show("1");
             connection = new SQLiteConnection("data source=" + connectionString);
+            MessageBox.Show("2");
             connection.Open();
+            MessageBox.Show("3");
 
             this.tableName = tableName;
 

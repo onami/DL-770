@@ -15,5 +15,3 @@ E:\projects\DL 770\DL770WinCE\obj\Debug\DL770WinCE.Properties.Resources.resource
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL770 Prototype.csproj.GenerateResource.Cache
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.exe
 E:\projects\DL 770\DL770WinCE\obj\Debug\DL 770 Prototype.pdb
-E:\projects\DL 770\DL770WinCE\bin\Debug\System.Data.SQLite.dll
-E:\projects\DL 770\DL770WinCE\bin\Debug\System.Data.SQLite.xml
