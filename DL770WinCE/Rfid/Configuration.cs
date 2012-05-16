@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.IO;
 
-namespace DL6970
+namespace DL770.Rfid
 {
     /// <summary>
     /// Класс, хранящий данные о соединении с сервером

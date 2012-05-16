@@ -14,9 +14,9 @@ namespace DL770WinCE
     {
         public const int MB_ICONEXCLAMATION = 48;
 
-        //private DataCollector.DataCollector collector = new DataCollector.DataCollector(500, "rfidTags", Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfidDb.sqlite");
-        private RfidTagsCollector collector = new RfidTagsCollector(Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase) + @"\rfid.db");
+        private RfidTagsCollector collector;
         private RfidSession session;
+        private RfidWebClient webclient;
 
         [DllImport("coredll.dll")]
         public static extern bool MessageBeep(int uType);
@@ -47,6 +47,10 @@ namespace DL770WinCE
             btnConnect.Enabled = true;
             btnDisconnect.Enabled = false;
             radioButton4.Checked = true;
+
+            var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
+            collector = new RfidTagsCollector(path + @"\rfid.db");
+            webclient = new RfidWebClient(Configuration.Deserialize(path + @"\config.xml"));
         }
         
         private string RR9086GetErrorCodeDesc(byte errorCode)
@@ -234,7 +238,7 @@ namespace DL770WinCE
                                     comboBox1.Items.Add(temp);
                                 }
                             }
-                           // MessageBeep(10);
+                            MessageBeep(10);
                         }                        
                     }
                }
@@ -502,6 +506,9 @@ namespace DL770WinCE
             {
                 button5.Text = "Scan";
                 collector.Write(session);
+                var sessions = collector.GetUnshippedTags();
+                webclient.SendRfidReports(sessions);
+                collector.SetDeliveryStatus(sessions);
             }
             else
             {
@@ -510,8 +517,7 @@ namespace DL770WinCE
                 comboBox1.Items.Clear();
 
                 session = new RfidSession { sessionMode = RfidSession.SessionMode.Reading };
-                session.time = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
-
+                session.time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 button5.Text = "Stop";
             }
         }

@@ -86,9 +86,14 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Rfid\Configuration.cs" />
+    <Compile Include="Rfid\Json.cs" />
     <Compile Include="Rfid\Session.cs" />
     <Compile Include="Rfid\TagsCollector.cs" />
+    <Compile Include="Rfid\WebClient.cs" />
     <Compile Include="RWDev.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="config.xml" />
   </ItemGroup>
   <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />
   <Import Condition="'$(TargetFrameworkVersion)' == 'v2.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
@@ -107,4 +112,7 @@
   </Target>
   -->
   <Import Condition="'$(TargetFrameworkVersion)' == 'v3.5'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)config.xml" "$(ProjectDir)$(OutDir)config.xml"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
