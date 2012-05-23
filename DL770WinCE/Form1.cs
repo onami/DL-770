@@ -17,6 +17,7 @@ namespace DL770WinCE
         private RfidTagsCollector collector;
         private RfidSession session;
         private RfidWebClient webclient;
+        private UTF8Encoding UniEncoding = new UTF8Encoding();
 
         [DllImport("coredll.dll")]
         public static extern bool MessageBeep(int uType);
@@ -46,7 +47,7 @@ namespace DL770WinCE
             InitializeComponent();
             btnConnect.Enabled = true;
             btnDisconnect.Enabled = false;
-            radioButton4.Checked = true;
+
 
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             collector = new RfidTagsCollector(path + @"\rfid.db");
@@ -171,6 +172,44 @@ namespace DL770WinCE
             }
 
         }
+
+        private byte[] getFirstTag()
+        {
+            var data = new byte[160];
+            byte length = 0;
+            byte cardsCount = 0;
+
+            if (RWDev.Inventory_G2(ref readerAddr, ref length, data, ref cardsCount) == 0)
+            {
+                byte[] daw = new byte[length - 6]; //Почему -6?
+                Array.Copy(EPCAndID, daw, length - 6);
+
+                //Формат записи:
+                //1 байт - длина метки
+                //далее тело метки
+                //затем последовательность повторяется
+
+                //Следовательно, в daw[0] лежит длина первой метки
+                byte[] firstTagData = new byte[daw[0]];
+                //1 - это смещение; мы не копируем байт с указанием длины метки
+                ArrayRangeCopy(ref daw, ref firstTagData, 1, firstTagData.Length);
+                return firstTagData;
+            }
+
+            else
+            {
+                return new byte[0];
+            }
+        }
+
+        private void ArrayRangeCopy(ref byte[] source, ref byte[] destination, int offset, int length)
+        {
+            for(var i = 0; i < length; i++)
+            {
+                destination[i] = source[i + offset];
+            }            
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             if (isStopInventory)
@@ -192,8 +231,9 @@ namespace DL770WinCE
 
                 if (fCmdRet == 0)
                 {
-                    byte[] daw = new byte[Len-6];
+                    byte[] daw = new byte[Len-6]; //Почем -6
                     Array.Copy(EPCAndID, daw, Len-6);
+
                     temps = ByteArrayToHexString(daw);
                     fInventory_EPC_List = temps;            //存贮记录
                     m = 0;
@@ -204,9 +244,12 @@ namespace DL770WinCE
 
                             EPClen = daw[m];
                             temp = temps.Substring(m * 2 + 2, EPClen * 2);
+                           // byte[] epcData = new byte[EPClen];
+
                             list.Add(temp);
                             m = m + EPClen + 1;
                             isonlistview = false;
+
                             for (n = 0;n< ListView1_EPC.Items.Count; n++)     //判断是否在Listview列表内
                             {
                               if (temp == ListView1_EPC.Items[n].SubItems[1].Text)
@@ -216,7 +259,6 @@ namespace DL770WinCE
 
                                     if (session.tags.Contains(temp) == false)
                                     {
-                                    //    MessageBox.Show(temp);
                                         session.tags.Add(temp);
                                     }
 
@@ -233,20 +275,11 @@ namespace DL770WinCE
                                 s = temp;
                                 aListItem.SubItems[0].Text = (ListView1_EPC.Items.Count).ToString();
                                 ChangeSubItem(aListItem, 1, s);
-                                if (comboBox1.Items.IndexOf(temp) == -1)
-                                {
-                                    comboBox1.Items.Add(temp);
-                                }
                             }
                             MessageBeep(10);
                         }                        
                     }
-               }
-               if ((comboBox1.Items.Count != 0))
-               {
-                   comboBox1.SelectedIndex = 0;
-               }
-               
+               }             
             }
             isStopInventory = false;
         }
@@ -358,58 +391,24 @@ namespace DL770WinCE
 
         private void button1_Click(object sender, EventArgs e)
         {
-            timer2.Enabled = !timer2.Enabled;
-            if (!timer2.Enabled)
-            {
-                button1.Text = "Read";
-            }
-            else
-            {
-                listBox1.Items.Clear();
-                button1.Text = "Stop";
-            }
-        }
-
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-            int result = 0x30;
+            int  result = 0x30;
             byte Len = 0;
             byte ENum = 0;
-            byte Mem = 0;
+            byte memorySection = 3;
             byte Num = 0;
             byte WordPtr = 0;
             byte Errorcode = 0;
             byte[] Password = new byte[4];
             byte[] Data = new byte[440];
-            string str;
-            if (comboBox1.Items.Count == 0)
-                return;
-            str = comboBox1.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            byte[] EPC = new byte[ENum];
-            EPC = HexStringToByteArray(str);
-            if (radioButton1.Checked)
-                Mem = 0;
-            if (radioButton2.Checked)
-                Mem = 1;
-            if (radioButton3.Checked)
-                Mem = 2;
-            if (radioButton4.Checked)
-                Mem = 3;
-            if (textBox1.Text == "")
-                return;
-            if (textBox2.Text == "")
-                return;
-            if (textBox3.Text == "" | textBox3.Text.Length!=8)
-                return;
-            WordPtr = Convert.ToByte(textBox1.Text, 16);
-            Num = Convert.ToByte(textBox2.Text);
-            Password = HexStringToByteArray(textBox3.Text);
+
+            var EPC = getFirstTag();
+            ENum = (byte)(EPC.Length / 2);
+
+            WordPtr = 0;
+            Num = 4;
             Len = Convert.ToByte(12 + ENum * 2);
-         //   listBox1.Items.Clear();
-            result = RWDev.ReadCard_G2(ref readerAddr, ref Len, ENum, EPC, Mem, WordPtr, Num, Password, Data, ref Errorcode);
+
+            result = RWDev.ReadCard_G2(ref readerAddr, ref Len, ENum, EPC, memorySection, WordPtr, Num, Password, Data, ref Errorcode);
             if (Len == 5)
             {
                 return;
@@ -418,67 +417,82 @@ namespace DL770WinCE
             {
                 byte[] daw = new byte[Len - 5];
                 Array.Copy(Data, daw, Len - 5);
-                if (listBox1.Items.IndexOf(ByteArrayToHexString(daw)) == -1)
-                {
-                    listBox1.Items.Add(ByteArrayToHexString(daw));
-                }
+
+                var timestamp = (int)(daw[0]) + (int)(daw[1] << 8) + (int)(daw[2] << 16) + (int)(daw[3] << 24);
+                var date = new DateTime(1970, 1, 1).AddSeconds(timestamp);
+                dateTimePicker.Value = date;
+
+                WellNumber.Text = ((int)daw[4] + (int)(daw[5] << 8)).ToString();
+                TubesLength.Text = ((int)daw[6] + (int)(daw[7] << 8)).ToString();
             }
+        }
+
+        static bool ByteArrayCompare(byte[] a1, byte[] a2)
+        {
+            if (a1.Length != a2.Length)
+                return false;
+
+            for (int i = 0; i < a1.Length; i++)
+                if (a1[i] != a2[i])
+                    return false;
+
+            return true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            int result = 0x30;
-            byte Len = 0;
-            byte WNum = 0;
-            byte ENum = 0;
-            byte Mem = 0;
-            byte Num = 0;
-            byte WordPtr = 0;
-            byte Errorcode = 0;
-            byte[] Password = new byte[4];
-            byte[] Data = new byte[440];
-            string str,str1;
-            if (comboBox1.Items.Count == 0)
-                return;
-            str = comboBox1.SelectedItem.ToString();
-            if (str == "")
-                return;
-            ENum = Convert.ToByte(str.Length / 4);
-            byte[] EPC = new byte[ENum*2];
-            EPC = HexStringToByteArray(str);
-            if (radioButton1.Checked)
-                Mem = 0;
-            if (radioButton2.Checked)
-                Mem = 1;
-            if (radioButton3.Checked)
-                Mem = 2;
-            if (radioButton4.Checked)
-                Mem = 3;
-            if (textBox1.Text == "")
-                return;
-            if (textBox2.Text == "")
-                return;
-            if (textBox3.Text == "" | textBox3.Text.Length != 8)
-                return;
-            if (textBox4.Text == "" | textBox4.Text.Length %4 !=0)
-                return;
-            str1 = textBox4.Text;
-            WNum = Convert.ToByte(str1.Length / 4);
-            byte[] writedata = new byte[WNum * 2];
-            writedata = HexStringToByteArray(str1);
-            WordPtr = Convert.ToByte(textBox1.Text, 16);
-            Num = Convert.ToByte(textBox2.Text);
-            Password = HexStringToByteArray(textBox3.Text);
-            //   listBox1.Items.Clear();
-            Len = Convert.ToByte(12 + (ENum+WNum) * 2);
-            result = RWDev.WriteCard_G2(ref readerAddr, ref Len, WNum, ENum, EPC, Mem, WordPtr, writedata, Password,ref Errorcode);
+            var input = new byte[8];
+   
+            TimeSpan t = (dateTimePicker.Value - new DateTime(1970, 1, 1).ToLocalTime());
+            int timestamp = (int) t.TotalSeconds;
+            input[0] = (byte)(timestamp & 0x000000FF);
+            input[1] = (byte)((timestamp >> 8) & 0x000000FF);
+            input[2] = (byte)((timestamp >> 16) & 0x000000FF);
+            input[3] = (byte)((timestamp >> 24) & 0x000000FF);
+
+            var wellNumber = Convert.ToInt32(WellNumber.Text);
+            input[4] = (byte)(wellNumber & 0x000000FF);
+            input[5] = (byte)((wellNumber >> 8) & 0x000000FF);
+
+            var tubesLength = Convert.ToInt32(TubesLength.Text);
+            input[6] = (byte)(tubesLength & 0x000000FF);
+            input[7] = (byte)((tubesLength >> 8) & 0x000000FF);
+
+            byte totalLength = 0; //Некая общая длина всех передаваемых во WriteCard данных
+
+            //0x00: Password area
+            //0x01: EPC memory area
+            //0x02: TID memory area
+            //0x03: User’s memory area
+            byte memorySection = 3;
+
+            byte offset = 0; //Смещение, с которого записать данные
+            byte errorCode = 0; //Код ошибки
+            var result = 0x30; //Сюда записывается значение функции WriteCard_G2
+            var password = new byte[4] { 0, 0, 0, 0 }; //Пароль доступа к метке
+            var EPC = getFirstTag();
+
+            totalLength = Convert.ToByte(12 + EPC.Length + input.Length);
+
+            result = RWDev.WriteCard_G2(
+                ref readerAddr,
+                ref totalLength,
+                (byte)(input.Length / 2),
+                (byte)(EPC.Length/2),
+                EPC,
+                memorySection,
+                offset,
+                input,
+                password,
+                ref errorCode);
+            
             if (result == 0)
             {
-                MessageBox.Show("Write success.", "Information");
+              //  MessageBox.Show("Write success.", "Information");
             }
             else 
             {
-                MessageBox.Show("Write Failed.", "Information");
+                MessageBox.Show("Write Failed.", "Error Code: " + errorCode.ToString());
             }
         }
 
@@ -507,14 +521,13 @@ namespace DL770WinCE
                 button5.Text = "Scan";
                 collector.Write(session);
                 var sessions = collector.GetUnshippedTags();
-                webclient.SendRfidReports(sessions);
-                collector.SetDeliveryStatus(sessions);
+               // webclient.SendRfidReports(sessions);
+              //  collector.SetDeliveryStatus(sessions);
             }
             else
             {
                 ListView1_EPC.Items.Clear();
                 list.Clear();
-                comboBox1.Items.Clear();
 
                 session = new RfidSession { sessionMode = RfidSession.SessionMode.Reading };
                 session.time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
@@ -536,9 +549,8 @@ namespace DL770WinCE
                 button6.Text = "Stop";
                 CardNum1 = 0;
             }
-
-
         }
+
         private void Inventory6b()
         {
             byte[] ID_6B = new byte[2000];
@@ -711,13 +723,22 @@ namespace DL770WinCE
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             timer1.Enabled = false;
-            timer2.Enabled = false;
             timer3.Enabled = false;
             timer4.Enabled = false;
             button5.Text="Scan";
             button1.Text = "Read";
             button6.Text = "List Tag ID";
             button7.Text = "Read";
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
 
