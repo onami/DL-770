@@ -260,7 +260,7 @@ namespace DL770
 
             else
             {
-                MessageBox.Show("Connection failed.", "Communication");
+                MessageBox.Show("Не удалось включить модуль считывания", "Ошибка инициализации");
                 connectButton.Enabled = true;
                 disconnectButton.Enabled = false;
             }
@@ -279,7 +279,7 @@ namespace DL770
             }
             else
             {
-                MessageBox.Show("DisconnectReader failed.", "Communication");
+                MessageBox.Show("Не удалось отключить модуль считывания", "Ошибка инициализации");
                 connectButton.Enabled = false;
                 disconnectButton.Enabled = true;
             }
@@ -352,7 +352,7 @@ namespace DL770
 
                 if (reader.WriteBytes(reader.GetFirstTag(), data, RfidReader.MemorySection.User) != (int)RfidReader.ResultCode.Ok)
                 {
-                    MessageBox.Show("Запись не удалась");
+                    MessageBox.Show("Не удалось записать данные на метку", "Ошибка");
                 }
             }
             catch (Exception ex)
@@ -368,7 +368,7 @@ namespace DL770
             dmaxfre = Convert.ToByte(maxFrequencyComboBox.SelectedIndex);
             if (dminfre > dmaxfre)
             {
-                MessageBox.Show("dminfre > dmaxfre!", "Information");
+                MessageBox.Show("Минимальное значение больше максимального!", "Ошибка");
             }
             powerDbm = Convert.ToByte(powerDbmComboBox.SelectedIndex + 20);
             fCmdRet = RWDev.Writepower(ref readerAddr, ref powerDbm);
@@ -376,7 +376,7 @@ namespace DL770
             
             if(fCmdRet != 0)
             {
-                MessageBox.Show("Update Error: " + RfidReader.GetResultCodeDescription((RfidReader.ResultCode)fCmdRet));
+                MessageBox.Show("Не удалось обновить настройки.\nКод ошибки:" + RfidReader.GetResultCodeDescription((RfidReader.ResultCode)fCmdRet), "Ошибка");
             }
             return;
         }
@@ -408,11 +408,6 @@ namespace DL770
         {
             scanGen2Timer.Enabled = false;
             ScanEpcTagsButton.Text = "Сканировать";
-        }
-
-        private void tubesLengthInput_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

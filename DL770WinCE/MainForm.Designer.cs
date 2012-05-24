@@ -118,7 +118,6 @@ namespace DL770
             this.tubesLengthInput.Size = new System.Drawing.Size(103, 23);
             this.tubesLengthInput.TabIndex = 20;
             this.tubesLengthInput.Text = "0";
-            this.tubesLengthInput.TextChanged += new System.EventHandler(this.tubesLengthInput_TextChanged);
             // 
             // wellNumberInput
             // 
