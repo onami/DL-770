@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 namespace DL770
 {
     partial class MainForm
@@ -56,6 +57,7 @@ namespace DL770
             this.disconnectButton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
             this.scanGen2Timer = new System.Windows.Forms.Timer();
+            this.syncTimeButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.TubesPack.SuspendLayout();
             this.EPCG2_ReadTags.SuspendLayout();
@@ -76,6 +78,7 @@ namespace DL770
             // 
             // TubesPack
             // 
+            this.TubesPack.Controls.Add(this.syncTimeButton);
             this.TubesPack.Controls.Add(this.TubesPackWriteButton);
             this.TubesPack.Controls.Add(this.tubesLengthText);
             this.TubesPack.Controls.Add(this.wellNumberText);
@@ -115,7 +118,7 @@ namespace DL770
             // 
             this.tubesLengthInput.Location = new System.Drawing.Point(118, 53);
             this.tubesLengthInput.Name = "tubesLengthInput";
-            this.tubesLengthInput.Size = new System.Drawing.Size(103, 23);
+            this.tubesLengthInput.Size = new System.Drawing.Size(109, 23);
             this.tubesLengthInput.TabIndex = 20;
             this.tubesLengthInput.Text = "0";
             // 
@@ -129,18 +132,19 @@ namespace DL770
             // 
             // dateTimePicker
             // 
-            this.dateTimePicker.CustomFormat = "yyyy-MM-dd HH:mm:ss";
+            this.dateTimePicker.CustomFormat = "yyyy-MM-dd HH:mm";
             this.dateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dateTimePicker.Location = new System.Drawing.Point(4, 3);
             this.dateTimePicker.Name = "dateTimePicker";
-            this.dateTimePicker.Size = new System.Drawing.Size(217, 24);
+            this.dateTimePicker.Size = new System.Drawing.Size(149, 24);
             this.dateTimePicker.TabIndex = 18;
+            this.dateTimePicker.Value = DateTime.Now;
             // 
             // TubesPackReadButton
             // 
             this.TubesPackReadButton.Location = new System.Drawing.Point(118, 91);
             this.TubesPackReadButton.Name = "TubesPackReadButton";
-            this.TubesPackReadButton.Size = new System.Drawing.Size(103, 20);
+            this.TubesPackReadButton.Size = new System.Drawing.Size(109, 20);
             this.TubesPackReadButton.TabIndex = 15;
             this.TubesPackReadButton.Text = "Считать";
             this.TubesPackReadButton.Click += new System.EventHandler(this.TubesPackReadButton_Click);
@@ -228,9 +232,9 @@ namespace DL770
             this.powerDbmComboBox.Items.Add("28");
             this.powerDbmComboBox.Items.Add("29");
             this.powerDbmComboBox.Items.Add("30");
-            this.powerDbmComboBox.Location = new System.Drawing.Point(110, 92);
+            this.powerDbmComboBox.Location = new System.Drawing.Point(117, 92);
             this.powerDbmComboBox.Name = "powerDbmComboBox";
-            this.powerDbmComboBox.Size = new System.Drawing.Size(100, 23);
+            this.powerDbmComboBox.Size = new System.Drawing.Size(110, 23);
             this.powerDbmComboBox.TabIndex = 11;
             // 
             // label10
@@ -242,9 +246,9 @@ namespace DL770
             // 
             // maxFrequencyComboBox
             // 
-            this.maxFrequencyComboBox.Location = new System.Drawing.Point(110, 62);
+            this.maxFrequencyComboBox.Location = new System.Drawing.Point(117, 62);
             this.maxFrequencyComboBox.Name = "maxFrequencyComboBox";
-            this.maxFrequencyComboBox.Size = new System.Drawing.Size(100, 23);
+            this.maxFrequencyComboBox.Size = new System.Drawing.Size(110, 23);
             this.maxFrequencyComboBox.TabIndex = 9;
             // 
             // label9
@@ -256,9 +260,9 @@ namespace DL770
             // 
             // minFrequencyComboBox
             // 
-            this.minFrequencyComboBox.Location = new System.Drawing.Point(110, 33);
+            this.minFrequencyComboBox.Location = new System.Drawing.Point(117, 33);
             this.minFrequencyComboBox.Name = "minFrequencyComboBox";
-            this.minFrequencyComboBox.Size = new System.Drawing.Size(100, 23);
+            this.minFrequencyComboBox.Size = new System.Drawing.Size(110, 23);
             this.minFrequencyComboBox.TabIndex = 7;
             // 
             // label3
@@ -270,9 +274,9 @@ namespace DL770
             // 
             // disconnectButton
             // 
-            this.disconnectButton.Location = new System.Drawing.Point(110, 3);
+            this.disconnectButton.Location = new System.Drawing.Point(117, 3);
             this.disconnectButton.Name = "disconnectButton";
-            this.disconnectButton.Size = new System.Drawing.Size(100, 20);
+            this.disconnectButton.Size = new System.Drawing.Size(110, 20);
             this.disconnectButton.TabIndex = 0;
             this.disconnectButton.Text = "Выключить";
             this.disconnectButton.Click += new System.EventHandler(this.btnDisconnect_Click);
@@ -290,6 +294,15 @@ namespace DL770
             // 
             this.scanGen2Timer.Interval = 50;
             this.scanGen2Timer.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // syncTimeButton
+            // 
+            this.syncTimeButton.Location = new System.Drawing.Point(159, 3);
+            this.syncTimeButton.Name = "syncTimeButton";
+            this.syncTimeButton.Size = new System.Drawing.Size(68, 24);
+            this.syncTimeButton.TabIndex = 24;
+            this.syncTimeButton.Text = "Синхро";
+            this.syncTimeButton.Click += new System.EventHandler(this.syncTimeButton_Click);
             // 
             // MainForm
             // 
@@ -338,6 +351,7 @@ namespace DL770
         private System.Windows.Forms.TextBox wellNumberInput;
         private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.Button TubesPackWriteButton;
+        private System.Windows.Forms.Button syncTimeButton;
     }
 }
 

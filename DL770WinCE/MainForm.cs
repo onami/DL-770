@@ -266,6 +266,11 @@ namespace DL770
             }
         }
 
+        private void syncTimeButton_Click(object sender, EventArgs e)
+        {
+            dateTimePicker.Value = DateTime.Now;
+        }
+
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             if (RWDev.DisconnectReader() == (int)RfidReader.ResultCode.Ok)
@@ -316,11 +321,12 @@ namespace DL770
                     byte[] daw = new byte[Len - 5];
                     Array.Copy(Data, daw, Len - 5);
 
-                    var timestamp = (int)(daw[0] << 24) + (int)(daw[1] << 16) + (int)(daw[2] << 8) + (int)(daw[3]);
-                    dateTimePicker.Value = new DateTime(1970, 1, 1).AddSeconds(timestamp);
+                    var handle = GCHandle.Alloc(daw, GCHandleType.Pinned);
+                    var pack = (TubesPack)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(TubesPack));
 
-                    wellNumberInput.Text = ((int)(daw[4] << 8) + (int)(daw[5])).ToString();
-                    tubesLengthInput.Text = ((int)(daw[6] << 8) + (int)(daw[7])).ToString();
+                    dateTimePicker.Value = new DateTime(1970, 1, 1).AddSeconds(pack.time);
+                    wellNumberInput.Text = pack.disrictId.ToString();
+                    tubesLengthInput.Text = pack.tubesLength.ToString();
                 }
             }
             catch (Exception ex)
@@ -333,22 +339,19 @@ namespace DL770
         {
             try
             {
+                var pack = new TubesPack()
+                {
+                    time = (int)(dateTimePicker.Value - new DateTime(1970, 1, 1).ToLocalTime()).TotalSeconds,
+                    disrictId = Convert.ToUInt16(wellNumberInput.Text),
+                    tubesLength = Convert.ToUInt16(tubesLengthInput.Text)
+                };
+
                 var data = new byte[8];
 
-                TimeSpan t = (dateTimePicker.Value - new DateTime(1970, 1, 1).ToLocalTime());
-                int timestamp = (int)t.TotalSeconds;
-                data[0] = (byte)((timestamp >> 24) & 0x000000FF);
-                data[1] = (byte)((timestamp >> 16) & 0x000000FF);
-                data[2] = (byte)((timestamp >> 8) & 0x000000FF);
-                data[3] = (byte)(timestamp & 0x000000FF);
-
-                var wellNumber = Convert.ToInt32(wellNumberInput.Text);
-                data[4] = (byte)((wellNumber >> 8) & 0x000000FF);
-                data[5] = (byte)(wellNumber & 0x000000FF);
-
-                var tubesLength = Convert.ToInt32(tubesLengthInput.Text);
-                data[6] = (byte)((tubesLength >> 8) & 0x000000FF);
-                data[7] = (byte)(tubesLength & 0x000000FF);
+                IntPtr pnt = Marshal.AllocHGlobal(Marshal.SizeOf(data));
+                var handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                Marshal.StructureToPtr(pack, handle.AddrOfPinnedObject(), false);
+                handle.Free();
 
                 if (reader.WriteBytes(reader.GetFirstTag(), data, RfidReader.MemorySection.User) != (int)RfidReader.ResultCode.Ok)
                 {
@@ -376,7 +379,7 @@ namespace DL770
             
             if(fCmdRet != 0)
             {
-                MessageBox.Show("Не удалось обновить настройки.\nКод ошибки:" + RfidReader.GetResultCodeDescription((RfidReader.ResultCode)fCmdRet), "Ошибка");
+                MessageBox.Show("Не удалось обновить настройки.\nКод ошибки: " + RfidReader.GetResultCodeDescription((RfidReader.ResultCode)fCmdRet), "Ошибка");
             }
             return;
         }

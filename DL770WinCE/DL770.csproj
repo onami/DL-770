@@ -90,6 +90,7 @@
     <Compile Include="Rfid\Json.cs" />
     <Compile Include="Rfid\Session.cs" />
     <Compile Include="Rfid\TagsCollector.cs" />
+    <Compile Include="Rfid\TubesPack.cs" />
     <Compile Include="Rfid\WebClient.cs" />
     <Compile Include="RWDev.cs" />
   </ItemGroup>
