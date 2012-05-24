@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DL770 Prototype", "DL770WinCE\DL770 Prototype.csproj", "{E07A0382-8B93-46A3-B389-C6D2C93CD4B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DL770", "DL770WinCE\DL770.csproj", "{E07A0382-8B93-46A3-B389-C6D2C93CD4B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

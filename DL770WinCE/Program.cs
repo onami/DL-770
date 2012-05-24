@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading;
 
-namespace DL770WinCE
+namespace DL770
 {
     static class Program
     {
@@ -12,7 +13,9 @@ namespace DL770WinCE
         [MTAThread]
         static void Main()
         {
-            Application.Run(new Form1());
+
+
+            Application.Run(new MainForm());
 
         }
     }

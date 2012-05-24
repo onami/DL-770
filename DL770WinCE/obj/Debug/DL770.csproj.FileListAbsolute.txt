@@ -1,0 +1,8 @@
+E:\projects\770\DL770WinCE\bin\Debug\DL770.exe
+E:\projects\770\DL770WinCE\bin\Debug\DL770.pdb
+E:\projects\770\DL770WinCE\obj\Debug\ResolveAssemblyReference.cache
+E:\projects\770\DL770WinCE\obj\Debug\DL770.MainForm.resources
+E:\projects\770\DL770WinCE\obj\Debug\DL770.Properties.Resources.resources
+E:\projects\770\DL770WinCE\obj\Debug\DL770.csproj.GenerateResource.Cache
+E:\projects\770\DL770WinCE\obj\Debug\DL770.exe
+E:\projects\770\DL770WinCE\obj\Debug\DL770.pdb

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace DL770WinCE
+namespace DL770
 {
     public static class RWDev
     {
@@ -32,7 +32,7 @@ namespace DL770WinCE
                                             ref byte CardNum);
 
         [DllImport("DL770WinCE.dll")]
-        public static extern int GetReaderInfo(ref byte address,				//读写器地址		
+        public static extern int GetReaderInfo(ref byte address,			//读写器地址		
                                                 byte[] versionInfo,			//软件版本
                                                 ref byte model,				//读写器型号
                                                 ref byte supProtocol,		//支持的协议
