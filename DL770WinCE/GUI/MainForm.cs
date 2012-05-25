@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DL770.Rfid;
+using System.Threading;
 
 namespace DL770
 {
@@ -13,8 +14,11 @@ namespace DL770
     {
         private RfidReader reader;
         private RfidTagsCollector collector;
-        private RfidSession session;
+        private TubesSession session;
         private RfidWebClient webclient;
+
+        private bool isRfidSessionSending = false;
+        private bool isTubesBungleSending = false;
 
         [DllImport("coredll.dll")]
         public static extern bool MessageBeep(int uType);
@@ -39,6 +43,8 @@ namespace DL770
             var path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetName().CodeBase);
             collector = new RfidTagsCollector(path + @"\rfid.db");
             webclient = new RfidWebClient(Configuration.Deserialize(path + @"\config.xml"));
+
+            new Thread(new ThreadStart(this.SendSessions)).Start();
         }
 
         /// <summary>
@@ -53,6 +59,22 @@ namespace DL770
             tubesPackReadButton.Enabled     = !tubesPackReadButton.Enabled;
             updateButton.Enabled            = !updateButton.Enabled;
             scanEpcTagsButton.Enabled       = !scanEpcTagsButton.Enabled;
+        }
+
+        private void SendSessions()
+        {
+            isRfidSessionSending = true;
+            var sessions = collector.GetUnshippedTags();
+            webclient.SendRfidReports(sessions);
+            collector.SetDeliveryStatus(sessions);
+            isRfidSessionSending = false;
+            #if DEBUG
+            sessions = collector.GetUnshippedTags();
+            if (sessions.Count != 0)
+            {
+                MessageBox.Show("Не отправлено: " + sessions.Count.ToString());
+            }
+            #endif
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -78,6 +100,10 @@ namespace DL770
         {
             collector.Close();
             RWDev.ModulePowerOff();
+            //if (rfidSessionThread != null)
+            //{
+            //    rfidSessionThread.Abort();
+            //}
         } 
 
         private void TabControl_SelectedIndexChanged(object sender, EventArgs e)

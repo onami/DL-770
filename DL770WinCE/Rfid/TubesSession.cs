@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-//using Newtonsoft.Json;
 
 namespace DL770.Rfid
 {
@@ -8,27 +7,23 @@ namespace DL770.Rfid
     /// Класс, хранящий данные об одной сессии чтения
     /// Готов к сериализации в JSON.
     /// </summary>
-    public class RfidSession
+    public class TubesSession
     {
         public enum DeliveryStatus { Unshipped = 0, Shipped = 1 };
         public enum ReadingStatus { Normal = 0, InterruptedByTimer = 1 };
-        public enum SessionMode { Reading = 0, Registration = 1, Restoration = 2, Recycling = 3 };
+        public enum Mode { Reading = 0, Registration = 1, Restoration = 2, Recycling = 3 };
 
-//        [JsonIgnore]
+        [NonSerialized()]
         public int id;
         public string time;
         public string location = String.Empty;
-  //      [JsonIgnore]
-  //      [CLSCompliant(false)]
+        [NonSerialized()]
         public DeliveryStatus deliveryStatus = DeliveryStatus.Unshipped;
-   //     [CLSCompliant(false)]
         public ReadingStatus readingStatus = ReadingStatus.Normal;
-  //      [CLSCompliant(false)]
-        public SessionMode sessionMode = SessionMode.Reading;
+        public Mode sessionMode = Mode.Reading;
         public List<string> tags;
 
-
-        public RfidSession()
+        public TubesSession()
         {
             tags = new List<string>();
         }

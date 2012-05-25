@@ -6,3 +6,5 @@ E:\projects\770\DL770WinCE\obj\Debug\DL770.Properties.Resources.resources
 E:\projects\770\DL770WinCE\obj\Debug\DL770.csproj.GenerateResource.Cache
 E:\projects\770\DL770WinCE\obj\Debug\DL770.exe
 E:\projects\770\DL770WinCE\obj\Debug\DL770.pdb
+E:\projects\770\DL770WinCE\bin\Debug\CodeBetter.Json.CF.dll
+E:\projects\770\DL770WinCE\bin\Debug\CodeBetter.Json.CF.pdb

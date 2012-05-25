@@ -11,15 +11,23 @@ namespace DL770.Rfid
         public ushort disrictId; //wellId нечитабельно
         public ushort tubesLength;
 
-        public UInt64 test1;
-        public UInt64 test2;
-        public UInt64 test3;
-        public UInt64 test4;
-        public UInt64 test5;
-
         public static int GetSize()
         {
             return Marshal.SizeOf(new TubesBundle());
         }
     }
+
+    public class TubesBundleSession
+    {
+        public enum DeliveryStatus { Unshipped = 0, Shipped = 1 };
+        public enum Mode { Reading = 0, Writing = 1 };
+
+        [NonSerialized]
+        public Mode sessionMode;
+        [NonSerialized]
+        public DeliveryStatus deliveryStatus = DeliveryStatus.Unshipped;
+
+        public TubesBundle bundle;
+    }
+
 }

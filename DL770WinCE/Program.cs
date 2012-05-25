@@ -7,16 +7,10 @@ namespace DL770
 {
     static class Program
     {
-        /// <summary>
-        /// 应用程序的主入口点。
-        /// </summary>
         [MTAThread]
         static void Main()
         {
-
-
             Application.Run(new MainForm());
-
         }
     }
 }

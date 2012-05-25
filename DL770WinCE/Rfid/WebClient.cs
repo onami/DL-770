@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using CodeBetter.Json;
 
 namespace DL770.Rfid
 {
@@ -14,10 +15,10 @@ namespace DL770.Rfid
     ///     В error записывается либо null, если всё прошло нормально, либо же код ошибки.
     ///     В последнем случае в result записывается возможное словесное описание ошибки. 
     /// </summary>
-    struct RpcResponse
+    class RpcResponse
     {
-        public string Result;
-        public StatusCode Status;
+        public string result;
+        public StatusCode status;
 
         /// <summary>
         /// Перечисление определяет возможный статус запроса, возвращаемый сервером.
@@ -35,6 +36,11 @@ namespace DL770.Rfid
             EmptyRequest = 6,
             ConnectionFail = 7
         };
+
+        public RpcResponse()
+        {
+
+        }
     }
 
     /// <summary>
@@ -65,13 +71,13 @@ namespace DL770.Rfid
         /// </summary>
         /// <param name="unshippedSessions">Список сессий считывания со статусом Session.DeliveryStatus.Unshipped.
         /// Список заполняется TagsCollector.GetUnshippedTags()</param>
-        public void SendRfidReports(List<RfidSession> unshippedSessions)
+        public void SendRfidReports(List<TubesSession> unshippedSessions)
         {
             var url = "post/" + Configuration.DeviceKey + "/";
 
             foreach (var session in unshippedSessions)
             {
-                var jsonString = RfidJson.Serialise(session);
+                var jsonString = Converter.Serialize(session);
                 var jsonHashString = String.Empty;
 
                 //Получается, что конвертация производится и в этом методе
@@ -85,11 +91,11 @@ namespace DL770.Rfid
                 }
 
                 var response = SendPostData(url, "json=" + jsonString + "&checksum=" + jsonHashString);
-           
+
                 //Если дубликат, тоже не отправлять.
-                if (response.Status == RpcResponse.StatusCode.Ok || response.Status == RpcResponse.StatusCode.DuplicatedMessage)
+                if (response.status == RpcResponse.StatusCode.Ok || response.status == RpcResponse.StatusCode.DuplicatedMessage)
                 {
-                    session.deliveryStatus = RfidSession.DeliveryStatus.Shipped;
+                    session.deliveryStatus = TubesSession.DeliveryStatus.Shipped;
                 }
             }
         }
@@ -99,37 +105,44 @@ namespace DL770.Rfid
         /// </summary>
         /// <param name="url">Метод</param>
         /// <param name="data">Параметры</param>
-
         RpcResponse SendPostData(string url, string data)
         {
             try
             {
-            //посылка
-            var byteArray = UniEncoding.GetBytes(data);
-            var webRequest = (HttpWebRequest)WebRequest.Create(Configuration.Server + url);
-            //ставим в null; в противном случае webRequest начинает поиск прокси и тратит кучу времени
-            //На DL770 падает
-            //webRequest.Proxy = null; 
-            webRequest.Method = "POST";
-            webRequest.AllowAutoRedirect = false;
-            webRequest.ContentType = "application/x-www-form-urlencoded";
-            webRequest.ContentLength = byteArray.Length;
-            var webpageStream = webRequest.GetRequestStream();
-            webpageStream.Write(byteArray, 0, byteArray.Length);
-            webpageStream.Close();
-                  
-            //обработка
-            var responseStr = new StreamReader(webRequest.GetResponse().GetResponseStream()).ReadToEnd();
+                var byteArray = UniEncoding.GetBytes(data);
+                var webRequest = (HttpWebRequest)WebRequest.Create(Configuration.Server + url);
+                //ставим в null; в противном случае webRequest начинает поиск прокси и тратит кучу времени
+                //На DL770 падает
+                //webRequest.Proxy = null; 
+                webRequest.Method = "POST";
+                webRequest.AllowAutoRedirect = false;
+                webRequest.ContentType = "application/x-www-form-urlencoded";
+                webRequest.ContentLength = byteArray.Length;
+                webRequest.Timeout = 5000;
+                var webpageStream = webRequest.GetRequestStream();
+                webpageStream.Write(byteArray, 0, byteArray.Length);
+                webpageStream.Close();
+                      
+                //обработка
+                using (var response = webRequest.GetResponse())
+                {
+                    var responseStr = new StreamReader(response.GetResponseStream()).ReadToEnd();
 
-            return RfidJson.Desialise(responseStr);
+                    //Использовал самописный десериализатор, т.к. CodeBetter, цитирую:
+                    //On the whole I found it works; From memory it does not deal with nulls nicely,
+                    //and I think I had to tweak datetime serialisation to make it work the way
+                    //other json serialisers do.
+                    //
+                    //Иными словами, Converter.Deserialize<RpcResponse>(responseStr) валится на "result":"null"
+                    return RfidJson.Deserialize(responseStr);
+                }
             }
 
             catch (Exception e)
             {
-                MessageBox.Show("error: " + e.Message);
                 var response = new RpcResponse();
-                response.Result = e.Message;
-                response.Status = RpcResponse.StatusCode.InternalServerError;
+                response.result = e.Message;
+                response.status = RpcResponse.StatusCode.InternalServerError;
                 return response;
             }
         }

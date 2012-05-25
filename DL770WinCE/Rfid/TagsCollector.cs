@@ -27,23 +27,23 @@ namespace DL770.Rfid
         /// <summary>
         /// Возвращает список неотправленных на сервер сессий чтения
         /// </summary>
-        public List<RfidSession> GetUnshippedTags()
+        public List<TubesSession> GetUnshippedTags()
         {
-            var sessions = new List<RfidSession>();
-            var sessionCmd = new SQLiteCommand(@"SELECT * from reading_sessions where delivery_status <> " + (int)RfidSession.DeliveryStatus.Shipped, connection);
+            var sessions = new List<TubesSession>();
+            var sessionCmd = new SQLiteCommand(@"SELECT * from reading_sessions where delivery_status <> " + (int)TubesSession.DeliveryStatus.Shipped, connection);
 
             using (var sessionReader = sessionCmd.ExecuteReader())
             {
                 while (sessionReader.Read())
                 {
-                    var session = new RfidSession
+                    var session = new TubesSession
                         {
                             id = sessionReader.GetInt32(0),
                             time = sessionReader.GetString(1),
                             location = sessionReader.GetString(2),
-                            deliveryStatus = (RfidSession.DeliveryStatus)sessionReader.GetInt32(3),
-                            readingStatus = (RfidSession.ReadingStatus)sessionReader.GetInt32(4),
-                            sessionMode = (RfidSession.SessionMode)sessionReader.GetInt32(5)
+                            deliveryStatus = (TubesSession.DeliveryStatus)sessionReader.GetInt32(3),
+                            readingStatus = (TubesSession.ReadingStatus)sessionReader.GetInt32(4),
+                            sessionMode = (TubesSession.Mode)sessionReader.GetInt32(5)
                         };
 
                     var tagCmd = new SQLiteCommand(@"SELECT * from tubes where session_id = " + session.id, connection);
@@ -86,7 +86,36 @@ namespace DL770.Rfid
             }
         }
 
-        public void Write(RfidSession session)
+
+        public void WriteTubesBundle(TubesBundle bundle)
+        {
+            var transaction = connection.BeginTransaction();
+
+            //Register a new session
+            var cmd = new SQLiteCommand(@"
+            INSERT INTO tubes_bundle (time_marker,  disrictId,  tubesLength, reading_mode, delivery_status)
+                                  VALUES(@time_marker, @location_id, @delivery_status, @reading_status, @reading_mode)", connection);
+            cmd.Parameters.AddWithValue("@time_marker", bundle.time);
+            cmd.Parameters.AddWithValue("@district_id", bundle.disrictId);
+            cmd.Parameters.AddWithValue("@delivery_status", bundle.tubesLength);
+
+            cmd.ExecuteNonQuery();
+
+            //Look up the last session id
+            cmd.CommandText = "SELECT last_insert_rowid()";
+            var sessionId = Convert.ToInt32(cmd.ExecuteScalar());
+
+            //Prepare for INSERT
+            cmd = new SQLiteCommand("INSERT INTO tubes (session_id, tag) VALUES(@session_id, @tag)", connection);
+            cmd.Parameters.AddWithValue("@session_id", sessionId);
+            var tag_ = new SQLiteParameter("@tag");
+            cmd.Parameters.Add(tag_);
+            cmd.ExecuteNonQuery();
+
+            transaction.Commit();
+        }
+
+        public void WriteSession(TubesSession session)
         {
             if (session.tags.Count == 0)
                 return;
@@ -142,7 +171,7 @@ namespace DL770.Rfid
         /// Обновление состояния по сессиям. Применяется при успешной отправке данных.
         /// </summary>
         /// <param name="sessions"></param>
-        public void SetDeliveryStatus(List<RfidSession> sessions)
+        public void SetDeliveryStatus(List<TubesSession> sessions)
         {
             foreach (var session in sessions)
             {

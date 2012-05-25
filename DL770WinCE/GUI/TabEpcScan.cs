@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using DL770.Rfid;
+using System.Threading;
 
 namespace DL770
 {
@@ -70,18 +71,17 @@ namespace DL770
                             m = m + EPClen + 1;
                             isonlistview = false;
 
+                            if (session.tags.Contains(temp) == false)
+                            {
+                                session.tags.Add(temp);
+                            }
+
                             for (n = 0; n < epcTagsListView.Items.Count; n++)     //判断是否在Listview列表内
                             {
                                 if (temp == epcTagsListView.Items[n].SubItems[1].Text)
                                 {
                                     aListItem = epcTagsListView.Items[n];
                                     ChangeSubItem(aListItem, 1, temp);
-
-                                    if (session.tags.Contains(temp) == false)
-                                    {
-                                        session.tags.Add(temp);
-                                    }
-
                                     isonlistview = true;
                                 }
                             }
@@ -111,18 +111,25 @@ namespace DL770
             if (!scanGen2Timer.Enabled)
             {
                 scanEpcTagsButton.Text = "Сканировать";
-                collector.Write(session);
-                var sessions = collector.GetUnshippedTags();
-                //webclient.SendRfidReports(sessions);
-                //collector.SetDeliveryStatus(sessions);
+                MessageBox.Show("Считано меток: " + session.tags.Count.ToString());
+                collector.WriteSession(session);
+
+                if (isRfidSessionSending == false)
+                {
+                    new Thread(new ThreadStart(this.SendSessions)).Start();
+                }
             }
             else
             {
                 epcTagsListView.Items.Clear();
                 list.Clear();
 
-                session = new RfidSession { sessionMode = RfidSession.SessionMode.Reading };
-                session.time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                session = new TubesSession
+                    {
+                    sessionMode = TubesSession.Mode.Reading,
+                    time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+                    };
+
                 scanEpcTagsButton.Text = "Остановить";
             }
         }

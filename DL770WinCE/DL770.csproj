@@ -30,7 +30,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>WindowsCE</DefineConstants>
+    <DefineConstants>DEBUG;WindowsCE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -51,6 +51,10 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeBetter.Json.CF, Version=1.0.3206.14650, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\CodeBetter.Json.CF.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -64,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DL770.cs" />
-    <Compile Include="GUI\EpcScanTab.cs">
+    <Compile Include="GUI\TabEpcScan.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\MainForm.cs">
@@ -73,13 +77,13 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\SettingsTab.cs">
+    <Compile Include="GUI\TabSettings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\Stuff.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GUI\TubesBundleTab.cs">
+    <Compile Include="GUI\TabTubesBundle.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -100,9 +104,9 @@
     </Compile>
     <Compile Include="RFID\Configuration.cs" />
     <Compile Include="RFID\Json.cs" />
-    <Compile Include="RFID\Session.cs" />
+    <Compile Include="RFID\TubesSession.cs" />
     <Compile Include="RFID\TagsCollector.cs" />
-    <Compile Include="RFID\TubesPack.cs" />
+    <Compile Include="RFID\TubesBundleSession.cs" />
     <Compile Include="RFID\WebClient.cs" />
     <Compile Include="RWDev.cs" />
   </ItemGroup>
