@@ -33,19 +33,20 @@ namespace DL770
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.TubesPack = new System.Windows.Forms.TabPage();
-            this.TubesPackWriteButton = new System.Windows.Forms.Button();
+            this.syncTimeButton = new System.Windows.Forms.Button();
+            this.tubesPackWriteButton = new System.Windows.Forms.Button();
             this.tubesLengthText = new System.Windows.Forms.Label();
             this.wellNumberText = new System.Windows.Forms.Label();
             this.tubesLengthInput = new System.Windows.Forms.TextBox();
             this.wellNumberInput = new System.Windows.Forms.TextBox();
             this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
-            this.TubesPackReadButton = new System.Windows.Forms.Button();
+            this.tubesPackReadButton = new System.Windows.Forms.Button();
             this.EPCG2_ReadTags = new System.Windows.Forms.TabPage();
-            this.EpcTagsListView = new System.Windows.Forms.ListView();
+            this.epcTagsListView = new System.Windows.Forms.ListView();
             this.listViewCol_Number = new System.Windows.Forms.ColumnHeader();
             this.listViewCol_ID = new System.Windows.Forms.ColumnHeader();
             this.listViewCol_Times = new System.Windows.Forms.ColumnHeader();
-            this.ScanEpcTagsButton = new System.Windows.Forms.Button();
+            this.scanEpcTagsButton = new System.Windows.Forms.Button();
             this.Parameters = new System.Windows.Forms.TabPage();
             this.updateButton = new System.Windows.Forms.Button();
             this.powerDbmComboBox = new System.Windows.Forms.ComboBox();
@@ -57,7 +58,6 @@ namespace DL770
             this.disconnectButton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
             this.scanGen2Timer = new System.Windows.Forms.Timer();
-            this.syncTimeButton = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.TubesPack.SuspendLayout();
             this.EPCG2_ReadTags.SuspendLayout();
@@ -74,31 +74,41 @@ namespace DL770
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(238, 265);
             this.tabControl.TabIndex = 1;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl_SelectedIndexChanged);
             // 
             // TubesPack
             // 
             this.TubesPack.Controls.Add(this.syncTimeButton);
-            this.TubesPack.Controls.Add(this.TubesPackWriteButton);
+            this.TubesPack.Controls.Add(this.tubesPackWriteButton);
             this.TubesPack.Controls.Add(this.tubesLengthText);
             this.TubesPack.Controls.Add(this.wellNumberText);
             this.TubesPack.Controls.Add(this.tubesLengthInput);
             this.TubesPack.Controls.Add(this.wellNumberInput);
             this.TubesPack.Controls.Add(this.dateTimePicker);
-            this.TubesPack.Controls.Add(this.TubesPackReadButton);
+            this.TubesPack.Controls.Add(this.tubesPackReadButton);
             this.TubesPack.Location = new System.Drawing.Point(4, 25);
             this.TubesPack.Name = "TubesPack";
             this.TubesPack.Size = new System.Drawing.Size(230, 236);
             this.TubesPack.Text = "Подвеска ";
             // 
-            // TubesPackWriteButton
+            // syncTimeButton
             // 
-            this.TubesPackWriteButton.Location = new System.Drawing.Point(3, 91);
-            this.TubesPackWriteButton.Name = "TubesPackWriteButton";
-            this.TubesPackWriteButton.Size = new System.Drawing.Size(103, 20);
-            this.TubesPackWriteButton.TabIndex = 21;
-            this.TubesPackWriteButton.Text = "Записать";
-            this.TubesPackWriteButton.Click += new System.EventHandler(this.TubesPackWriteButton_Click);
+            this.syncTimeButton.Location = new System.Drawing.Point(159, 3);
+            this.syncTimeButton.Name = "syncTimeButton";
+            this.syncTimeButton.Size = new System.Drawing.Size(68, 24);
+            this.syncTimeButton.TabIndex = 24;
+            this.syncTimeButton.Text = "Синхро";
+            this.syncTimeButton.Click += new System.EventHandler(this.SyncTimeButton_Click);
+            // 
+            // tubesPackWriteButton
+            // 
+            this.tubesPackWriteButton.Enabled = false;
+            this.tubesPackWriteButton.Location = new System.Drawing.Point(3, 91);
+            this.tubesPackWriteButton.Name = "tubesPackWriteButton";
+            this.tubesPackWriteButton.Size = new System.Drawing.Size(103, 20);
+            this.tubesPackWriteButton.TabIndex = 21;
+            this.tubesPackWriteButton.Text = "Записать";
+            this.tubesPackWriteButton.Click += new System.EventHandler(this.TubesPackWriteButton_Click);
             // 
             // tubesLengthText
             // 
@@ -138,37 +148,38 @@ namespace DL770
             this.dateTimePicker.Name = "dateTimePicker";
             this.dateTimePicker.Size = new System.Drawing.Size(149, 24);
             this.dateTimePicker.TabIndex = 18;
-            this.dateTimePicker.Value = DateTime.Now;
+            this.dateTimePicker.Value = new System.DateTime(2012, 5, 25, 11, 36, 49, 103);
             // 
-            // TubesPackReadButton
+            // tubesPackReadButton
             // 
-            this.TubesPackReadButton.Location = new System.Drawing.Point(118, 91);
-            this.TubesPackReadButton.Name = "TubesPackReadButton";
-            this.TubesPackReadButton.Size = new System.Drawing.Size(109, 20);
-            this.TubesPackReadButton.TabIndex = 15;
-            this.TubesPackReadButton.Text = "Считать";
-            this.TubesPackReadButton.Click += new System.EventHandler(this.TubesPackReadButton_Click);
+            this.tubesPackReadButton.Enabled = false;
+            this.tubesPackReadButton.Location = new System.Drawing.Point(118, 91);
+            this.tubesPackReadButton.Name = "tubesPackReadButton";
+            this.tubesPackReadButton.Size = new System.Drawing.Size(109, 20);
+            this.tubesPackReadButton.TabIndex = 15;
+            this.tubesPackReadButton.Text = "Считать";
+            this.tubesPackReadButton.Click += new System.EventHandler(this.TubesPackReadButton_Click);
             // 
             // EPCG2_ReadTags
             // 
-            this.EPCG2_ReadTags.Controls.Add(this.EpcTagsListView);
-            this.EPCG2_ReadTags.Controls.Add(this.ScanEpcTagsButton);
+            this.EPCG2_ReadTags.Controls.Add(this.epcTagsListView);
+            this.EPCG2_ReadTags.Controls.Add(this.scanEpcTagsButton);
             this.EPCG2_ReadTags.Location = new System.Drawing.Point(4, 25);
             this.EPCG2_ReadTags.Name = "EPCG2_ReadTags";
             this.EPCG2_ReadTags.Size = new System.Drawing.Size(230, 236);
             this.EPCG2_ReadTags.Text = "Метки ";
             // 
-            // EpcTagsListView
+            // epcTagsListView
             // 
-            this.EpcTagsListView.Columns.Add(this.listViewCol_Number);
-            this.EpcTagsListView.Columns.Add(this.listViewCol_ID);
-            this.EpcTagsListView.Columns.Add(this.listViewCol_Times);
-            this.EpcTagsListView.FullRowSelect = true;
-            this.EpcTagsListView.Location = new System.Drawing.Point(1, 3);
-            this.EpcTagsListView.Name = "EpcTagsListView";
-            this.EpcTagsListView.Size = new System.Drawing.Size(227, 202);
-            this.EpcTagsListView.TabIndex = 4;
-            this.EpcTagsListView.View = System.Windows.Forms.View.Details;
+            this.epcTagsListView.Columns.Add(this.listViewCol_Number);
+            this.epcTagsListView.Columns.Add(this.listViewCol_ID);
+            this.epcTagsListView.Columns.Add(this.listViewCol_Times);
+            this.epcTagsListView.FullRowSelect = true;
+            this.epcTagsListView.Location = new System.Drawing.Point(1, 3);
+            this.epcTagsListView.Name = "epcTagsListView";
+            this.epcTagsListView.Size = new System.Drawing.Size(227, 202);
+            this.epcTagsListView.TabIndex = 4;
+            this.epcTagsListView.View = System.Windows.Forms.View.Details;
             // 
             // listViewCol_Number
             // 
@@ -185,14 +196,15 @@ namespace DL770
             this.listViewCol_Times.Text = "";
             this.listViewCol_Times.Width = 34;
             // 
-            // ScanEpcTagsButton
+            // scanEpcTagsButton
             // 
-            this.ScanEpcTagsButton.Location = new System.Drawing.Point(1, 211);
-            this.ScanEpcTagsButton.Name = "ScanEpcTagsButton";
-            this.ScanEpcTagsButton.Size = new System.Drawing.Size(227, 20);
-            this.ScanEpcTagsButton.TabIndex = 3;
-            this.ScanEpcTagsButton.Text = "Сканировать";
-            this.ScanEpcTagsButton.Click += new System.EventHandler(this.button5_Click);
+            this.scanEpcTagsButton.Enabled = false;
+            this.scanEpcTagsButton.Location = new System.Drawing.Point(1, 211);
+            this.scanEpcTagsButton.Name = "scanEpcTagsButton";
+            this.scanEpcTagsButton.Size = new System.Drawing.Size(227, 20);
+            this.scanEpcTagsButton.TabIndex = 3;
+            this.scanEpcTagsButton.Text = "Сканировать";
+            this.scanEpcTagsButton.Click += new System.EventHandler(this.ScanEpcTagsButton_Click);
             // 
             // Parameters
             // 
@@ -212,12 +224,13 @@ namespace DL770
             // 
             // updateButton
             // 
+            this.updateButton.Enabled = false;
             this.updateButton.Location = new System.Drawing.Point(1, 211);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(227, 20);
             this.updateButton.TabIndex = 12;
             this.updateButton.Text = "Обновить настройки";
-            this.updateButton.Click += new System.EventHandler(this.button4_Click);
+            this.updateButton.Click += new System.EventHandler(this.UpdateSettingsButton_Click);
             // 
             // powerDbmComboBox
             // 
@@ -274,12 +287,13 @@ namespace DL770
             // 
             // disconnectButton
             // 
+            this.disconnectButton.Enabled = false;
             this.disconnectButton.Location = new System.Drawing.Point(117, 3);
             this.disconnectButton.Name = "disconnectButton";
             this.disconnectButton.Size = new System.Drawing.Size(110, 20);
             this.disconnectButton.TabIndex = 0;
             this.disconnectButton.Text = "Выключить";
-            this.disconnectButton.Click += new System.EventHandler(this.btnDisconnect_Click);
+            this.disconnectButton.Click += new System.EventHandler(this.DisconnectButton_Click);
             // 
             // connectButton
             // 
@@ -288,21 +302,12 @@ namespace DL770
             this.connectButton.Size = new System.Drawing.Size(100, 20);
             this.connectButton.TabIndex = 0;
             this.connectButton.Text = "Включить";
-            this.connectButton.Click += new System.EventHandler(this.btnConnect_Click);
+            this.connectButton.Click += new System.EventHandler(this.ConnectButton_Click);
             // 
             // scanGen2Timer
             // 
             this.scanGen2Timer.Interval = 50;
-            this.scanGen2Timer.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // syncTimeButton
-            // 
-            this.syncTimeButton.Location = new System.Drawing.Point(159, 3);
-            this.syncTimeButton.Name = "syncTimeButton";
-            this.syncTimeButton.Size = new System.Drawing.Size(68, 24);
-            this.syncTimeButton.TabIndex = 24;
-            this.syncTimeButton.Text = "Синхро";
-            this.syncTimeButton.Click += new System.EventHandler(this.syncTimeButton_Click);
+            this.scanGen2Timer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // MainForm
             // 
@@ -313,8 +318,8 @@ namespace DL770
             this.Controls.Add(this.tabControl);
             this.Name = "MainForm";
             this.Text = "UHF-RFID";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.Form1_Closing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Closing += new System.ComponentModel.CancelEventHandler(this.MainForm_Closing);
             this.tabControl.ResumeLayout(false);
             this.TubesPack.ResumeLayout(false);
             this.EPCG2_ReadTags.ResumeLayout(false);
@@ -332,7 +337,7 @@ namespace DL770
         private System.Windows.Forms.TabPage EPCG2_ReadTags;
         private System.Windows.Forms.Timer scanGen2Timer;
         private System.Windows.Forms.TabPage TubesPack;
-        private System.Windows.Forms.Button TubesPackReadButton;
+        private System.Windows.Forms.Button tubesPackReadButton;
         private System.Windows.Forms.ComboBox minFrequencyComboBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button updateButton;
@@ -340,8 +345,8 @@ namespace DL770
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox maxFrequencyComboBox;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Button ScanEpcTagsButton;
-        private System.Windows.Forms.ListView EpcTagsListView;
+        private System.Windows.Forms.Button scanEpcTagsButton;
+        private System.Windows.Forms.ListView epcTagsListView;
         private System.Windows.Forms.ColumnHeader listViewCol_Number;
         private System.Windows.Forms.ColumnHeader listViewCol_ID;
         private System.Windows.Forms.ColumnHeader listViewCol_Times;
@@ -350,7 +355,7 @@ namespace DL770
         private System.Windows.Forms.TextBox tubesLengthInput;
         private System.Windows.Forms.TextBox wellNumberInput;
         private System.Windows.Forms.DateTimePicker dateTimePicker;
-        private System.Windows.Forms.Button TubesPackWriteButton;
+        private System.Windows.Forms.Button tubesPackWriteButton;
         private System.Windows.Forms.Button syncTimeButton;
     }
 }

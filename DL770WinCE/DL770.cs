@@ -8,9 +8,8 @@ namespace DL770
 {
     class RfidReader
     {
-        //Некий адрес считывателя
-        private byte address;
-
+        private byte address; //Некий адрес считывателя
+        byte[] password = new byte[4] { 0, 0, 0, 0 }; //Пароль доступа к метке
         public ResultCode connectionStatus { get; private set; }
 
         public enum MemorySection : byte
@@ -55,6 +54,12 @@ namespace DL770
             connectionStatus = (ResultCode)RWDev.ConnectReader();
         }
 
+        public void Off()
+        {
+            RWDev.ModulePowerOff();
+            connectionStatus = (ResultCode)RWDev.DisconnectReader();
+        }
+
         static public string GetErrorCodeDescription(ErrorCode c)
         {
             switch (c)
@@ -94,20 +99,50 @@ namespace DL770
             }
         }
 
-        private void ArrayRangeCopy(ref byte[] source, ref byte[] destination, int offset, int length)
+        /// <summary>
+        /// Читает байты с метки с определенной секции данных.
+        /// </summary>
+        /// <remarks></remarks>
+        /// <param name="tag"></param>
+        /// <param name="data">Внимание! RWDev.ReadCard_G2 возвращает Len = 5, если метка считана не была.
+        /// В этом случае данный метод присваивает data пустое значение null</param>
+        /// <param name="memorySection"></param>
+        /// <returns></returns>
+        public ResultCode ReadBytes(byte[] tag, ref byte[] data, MemorySection memorySection)
         {
-            for (var i = 0; i < length; i++)
+            byte totalLength = 0; //Некая общая длина всех передаваемых данных
+            byte offset = 0; //Смещение, с которого считать данные
+            var result = ResultCode.UnknownError;
+            byte errorCode = 0;
+
+            totalLength = (byte)(12 + tag.Length); //12 - это китайская магия
+
+            result = (ResultCode)RWDev.ReadCard_G2(
+                ref address,
+                ref totalLength,
+                (byte)(tag.Length/2),
+                tag,
+                (byte)memorySection,
+                offset,
+                (byte)(data.Length/2),
+                password,
+                data,
+                ref errorCode);
+
+            if (totalLength == 5)
             {
-                destination[i] = source[i + offset];
+                data = null;
             }
+
+            return result;
         }
+
 
         public ResultCode WriteBytes(byte[] tag, byte[] data, MemorySection memorySection)
         {
-            byte totalLength = 0; //Некая общая длина всех передаваемых во WriteCard данных
+            byte totalLength = 0; //Некая общая длина всех передаваемых данных
             byte offset = 0; //Смещение, с которого записать данные
-            var result = ResultCode.UnknownError; //Сюда записывается значение функции WriteCard_G2
-            var password = new byte[4] { 0, 0, 0, 0 }; //Пароль доступа к метке
+            var result = ResultCode.UnknownError;
             byte errorCode = 0;
 
             totalLength = Convert.ToByte(12 + tag.Length + data.Length); //12 - это китайская магия
@@ -131,8 +166,8 @@ namespace DL770
         /// <returns></returns>
         public byte[] GetFirstTag()
         {
-            int cnt = 5;
-            var data = new byte[160];
+            var cnt = 5;
+            var data_ = new byte[160];
             byte length = 0;
             byte cardsCount = 0;
 
@@ -142,10 +177,10 @@ namespace DL770
                 Thread.Sleep(50);
             }
 
-            if (RWDev.Inventory_G2(ref address, ref length, data, ref cardsCount) == 0)
+            if (RWDev.Inventory_G2(ref address, ref length, data_, ref cardsCount) == 0)
             {
-                byte[] daw = new byte[length - 6]; //Почему -6?
-                Array.Copy(data, daw, length - 6);
+                var data = new byte[length - 6]; //Почему -6?
+                Array.Copy(data_, data, length - 6);
 
                 //Формат записи:
                 //1 байт - длина метки
@@ -153,9 +188,13 @@ namespace DL770
                 //затем последовательность повторяется
 
                 //Следовательно, в daw[0] лежит длина первой метки
-                byte[] firstTagData = new byte[daw[0]];
+                byte[] firstTagData = new byte[data[0]];
                 //1 - это смещение; мы не копируем байт с указанием длины метки
-                ArrayRangeCopy(ref daw, ref firstTagData, 1, firstTagData.Length);
+                for (var i = 0; i < firstTagData.Length; i++)
+                {
+                    firstTagData[i] = data[i + 1];
+                }                
+                
                 return firstTagData;
             }
 
@@ -164,5 +203,28 @@ namespace DL770
                 throw new Exception("Метка не обнаружена");
             }
         }
+
+        /// <summary>
+        /// Обновляет мощность считывателя
+        /// </summary>
+        /// <param name="power"></param>
+        /// <param name="minFreq"></param>
+        /// <param name="maxFreq"></param>
+        /// <returns></returns>
+        public ResultCode UpdatePower(byte power)
+        {
+            return (ResultCode)RWDev.Writepower(ref address, ref power);
+        }
+
+        /// <summary>
+        /// Обновляет диапазон рабочих частот считывателя
+        /// </summary>
+        /// <param name="maxFreq"></param>
+        /// <param name="minFreq"></param>
+        /// <returns></returns>
+        public ResultCode UpdateFrequency(byte maxFreq, byte minFreq)
+        {
+            return (ResultCode)RWDev.Writedfre(ref address, ref maxFreq, ref minFreq);
+        }         
     }
 }

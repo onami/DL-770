@@ -64,15 +64,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DL770.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="GUI\EpcScanTab.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\SettingsTab.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\Stuff.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\TubesBundleTab.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="GUI\MainForm.resx">
       <SubType>Designer</SubType>
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,12 +98,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Rfid\Configuration.cs" />
-    <Compile Include="Rfid\Json.cs" />
-    <Compile Include="Rfid\Session.cs" />
-    <Compile Include="Rfid\TagsCollector.cs" />
-    <Compile Include="Rfid\TubesPack.cs" />
-    <Compile Include="Rfid\WebClient.cs" />
+    <Compile Include="RFID\Configuration.cs" />
+    <Compile Include="RFID\Json.cs" />
+    <Compile Include="RFID\Session.cs" />
+    <Compile Include="RFID\TagsCollector.cs" />
+    <Compile Include="RFID\TubesPack.cs" />
+    <Compile Include="RFID\WebClient.cs" />
     <Compile Include="RWDev.cs" />
   </ItemGroup>
   <ItemGroup>
