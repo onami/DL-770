@@ -58,6 +58,7 @@ namespace DL770
             this.disconnectButton = new System.Windows.Forms.Button();
             this.connectButton = new System.Windows.Forms.Button();
             this.scanGen2Timer = new System.Windows.Forms.Timer();
+            this.TagEpcLabel = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.TubesPack.SuspendLayout();
             this.EPCG2_ReadTags.SuspendLayout();
@@ -78,6 +79,7 @@ namespace DL770
             // 
             // TubesPack
             // 
+            this.TubesPack.Controls.Add(this.TagEpcLabel);
             this.TubesPack.Controls.Add(this.syncTimeButton);
             this.TubesPack.Controls.Add(this.tubesPackWriteButton);
             this.TubesPack.Controls.Add(this.tubesLengthText);
@@ -309,6 +311,12 @@ namespace DL770
             this.scanGen2Timer.Interval = 50;
             this.scanGen2Timer.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
+            // TagEpcLabel
+            // 
+            this.TagEpcLabel.Location = new System.Drawing.Point(6, 127);
+            this.TagEpcLabel.Name = "TagEpcLabel";
+            this.TagEpcLabel.Size = new System.Drawing.Size(182, 20);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -357,6 +365,7 @@ namespace DL770
         private System.Windows.Forms.DateTimePicker dateTimePicker;
         private System.Windows.Forms.Button tubesPackWriteButton;
         private System.Windows.Forms.Button syncTimeButton;
+        private System.Windows.Forms.Label TagEpcLabel;
     }
 }
 

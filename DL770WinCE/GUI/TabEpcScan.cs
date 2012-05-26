@@ -111,7 +111,6 @@ namespace DL770
             if (!scanGen2Timer.Enabled)
             {
                 scanEpcTagsButton.Text = "Сканировать";
-                MessageBox.Show("Считано меток: " + session.tags.Count.ToString());
                 collector.WriteSession(session);
 
                 if (isRfidSessionSending == false)

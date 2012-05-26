@@ -44,7 +44,7 @@ namespace DL770
             collector = new RfidTagsCollector(path + @"\rfid.db");
             webclient = new RfidWebClient(Configuration.Deserialize(path + @"\config.xml"));
 
-            new Thread(new ThreadStart(this.SendSessions)).Start();
+            //new Thread(new ThreadStart(this.SendSessions)).Start();
         }
 
         /// <summary>
@@ -63,6 +63,8 @@ namespace DL770
 
         private void SendSessions()
         {
+            if (isRfidSessionSending) return;
+
             isRfidSessionSending = true;
             var sessions = collector.GetUnshippedTags();
             webclient.SendRfidReports(sessions);
@@ -75,6 +77,24 @@ namespace DL770
                 MessageBox.Show("Не отправлено: " + sessions.Count.ToString());
             }
             #endif
+        }
+
+        private void SendBundleSessions()
+        {
+            if (isTubesBungleSending) return;
+
+            isTubesBungleSending = true;
+            var sessions = collector.GetUnshippedBundles();
+            webclient.SendRfidReports(sessions);
+            collector.SetDeliveryStatus(sessions);
+            isTubesBungleSending = false;
+#if DEBUG
+            sessions = collector.GetUnshippedBundles();
+            if (sessions.Count != 0)
+            {
+                MessageBox.Show("Не отправлено: " + sessions.Count.ToString());
+            }
+#endif
         }
 
         private void MainForm_Load(object sender, EventArgs e)

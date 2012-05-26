@@ -71,6 +71,41 @@ namespace DL770.Rfid
         /// </summary>
         /// <param name="unshippedSessions">Список сессий считывания со статусом Session.DeliveryStatus.Unshipped.
         /// Список заполняется TagsCollector.GetUnshippedTags()</param>
+        public void SendRfidReports(List<TubesBundleSession> unshippedSessions)
+        {
+            var url = "post/bundle/" + Configuration.DeviceKey + "/";
+
+            foreach (var session in unshippedSessions)
+            {
+                var jsonString = Converter.Serialize(session);
+                var jsonHashString = String.Empty;
+
+                //Получается, что конвертация производится и в этом методе
+                //и в SendPostData. Возможно проще переписать метод
+                //Это надо засунуть в SendPostData
+                var inHashBytes = UniEncoding.GetBytes(jsonString);
+                var outHashBytes = Sha1.ComputeHash(inHashBytes);
+
+                foreach (var b in outHashBytes)
+                {
+                    jsonHashString += b.ToString("x2");
+                }
+
+                var response = SendPostData(url, "json=" + jsonString + "&checksum=" + jsonHashString);
+
+                //Если дубликат, тоже не отправлять.
+                if (response.status == RpcResponse.StatusCode.Ok || response.status == RpcResponse.StatusCode.DuplicatedMessage)
+                {
+                    session.deliveryStatus = TubesBundleSession.DeliveryStatus.Shipped;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Посылка сессий считывания
+        /// </summary>
+        /// <param name="unshippedSessions">Список сессий считывания со статусом Session.DeliveryStatus.Unshipped.
+        /// Список заполняется TagsCollector.GetUnshippedTags()</param>
         public void SendRfidReports(List<TubesSession> unshippedSessions)
         {
             var url = "post/" + Configuration.DeviceKey + "/";
@@ -127,7 +162,7 @@ namespace DL770.Rfid
                 using (var response = webRequest.GetResponse())
                 {
                     var responseStr = new StreamReader(response.GetResponseStream()).ReadToEnd();
-
+                    //MessageBox.Show(responseStr);
                     //Использовал самописный десериализатор, т.к. CodeBetter, цитирую:
                     //On the whole I found it works; From memory it does not deal with nulls nicely,
                     //and I think I had to tweak datetime serialisation to make it work the way

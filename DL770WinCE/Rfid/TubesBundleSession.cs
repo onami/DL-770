@@ -8,8 +8,8 @@ namespace DL770.Rfid
     public struct TubesBundle
     {
         public int time;
-        public ushort disrictId; //wellId нечитабельно
-        public ushort tubesLength;
+        public ushort districtId; //wellId нечитабельно
+        public ushort bundleLength;
 
         public static int GetSize()
         {
@@ -22,12 +22,13 @@ namespace DL770.Rfid
         public enum DeliveryStatus { Unshipped = 0, Shipped = 1 };
         public enum Mode { Reading = 0, Writing = 1 };
 
-        [NonSerialized]
+        public int id;
+        public string time;
         public Mode sessionMode;
-        [NonSerialized]
-        public DeliveryStatus deliveryStatus = DeliveryStatus.Unshipped;
-
+        public string tag;
         public TubesBundle bundle;
-    }
+
+        public DeliveryStatus deliveryStatus = DeliveryStatus.Unshipped;
+     }
 
 }
